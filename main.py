@@ -13,20 +13,17 @@ def getRandomPoint(lines):
         float(line[2])
     ]
 
-
 def initNeuron():
     weights = []
 
     for _ in range(1, 3):
-        # weights.append(random.randint(0, 1))
-        weights.append(0.75159)
+        weights.append(random.randint(0, 1))
 
     return {
         'biais': 0.5,
         'out': 0,
         'weights': weights
     }
-
 
 def getValueNeuron(neuron, x0, x1):
     w = neuron.get('weights')
@@ -36,6 +33,34 @@ def getValueNeuron(neuron, x0, x1):
         return 1
     else:
         return -1
+
+
+def trainNeuron(numberIteration, showGraph = False):
+    n1 = initNeuron()
+    x = []
+    y = []
+
+    for i in range(1, numberIteration):
+
+        error = 0
+
+        for line in lines:
+
+            res = getValueNeuron(n1, line[0], line[1])
+
+            if n1['out'] != res:
+                error = error + 1
+
+            n1['out'] = res
+            n1 = updateNeuron(n1, line[0], line[1], line[2])
+
+        print(error)
+        y.append(error)
+        x.append(i)
+
+    if showGraph:
+        plt.plot(x, y)
+        plt.show()
 
 
 def updateNeuron(neuron, x1, x2, tag):
@@ -52,33 +77,17 @@ def updateNeuron(neuron, x1, x2, tag):
 if __name__ == '__main__':
     size = 100
     step = 0.01
+    random.seed(15)
 
-    # writeFile(size)
+    x2BiggerThan0_5 = False
+    # A mettre a true si x2 >0.5
+    writeFile(size, x2BiggerThan0_5)
+
     lines = readFile()
 
-    n1 = initNeuron()
+    trainNeuron(5,True)
+    trainNeuron(10,True)
+    trainNeuron(50,True)
+    trainNeuron(100,True)
 
-    x = []
-    y = []
 
-    for i in range(1,50):
-
-        error = 0
-
-        for line in lines:
-
-            res = getValueNeuron(n1, line[0], line[1])
-
-            if n1['out'] != res:
-                error = error + 1
-
-            n1['out'] = res
-
-            n1 = updateNeuron(n1, line[0], line[1], line[2])
-
-        print(error)
-        y.append(error)
-        x.append(i)
-
-    plt.plot(x,y)
-    plt.show()

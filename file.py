@@ -4,14 +4,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def writeFile(size):
+def writeFile(size, x2Bigger = False):
     points = []
     value = [-1, 1]
 
     for i in range(1, size):
+
+        x2 = random.uniform(0, 1)
+        if x2Bigger:
+            while x2 < 0.5:
+                x2 = random.uniform(0, 1)
+
         points.append([
             random.uniform(0, 1),
-            random.uniform(0, 1),
+            x2,
             value[random.randint(0, 1)]
         ])
 
